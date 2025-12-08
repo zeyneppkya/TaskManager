@@ -1,44 +1,75 @@
 import java.util.Scanner;
 
 public class Main {
-    public static void main( String [] args){
-    TaskManager manager = new TaskManager();
-    Scanner scanner = new Scanner(System.in);
-    while(true){
-        System.out.println( "1 - Add Task"+
-                            "\n2 - List Tasks"+
-                            "\n3 - Remove Task"+
-                            "\n4 - Toggle Task Status"+
-                            "\n5 - Exit"+
-                            "\n Choose an aption:"
-        );
+    public static void main(String[] args) {
 
-      int choice= scanner.nextInt();
-      scanner.nextLine(); // nextInt() sonrası Enter tuşunu temizle, aksi takdirde nextLine() boş string döner
-      switch(choice){
-        case 1:
-            break;
+        TaskManager manager = new TaskManager(); 
+        Scanner scanner = new Scanner(System.in); 
+        int nextId = 1; // Task ID için otomatik artan sayı
 
-        case 2:
+        while (true) { 
+            System.out.println(
+                    "\n--- TASK MANAGER ---" +
+                    "\n1 - Add Task" +
+                    "\n2 - List Tasks" +
+                    "\n3 - Remove Task" +
+                    "\n4 - Toggle Task Status" +
+                    "\n5 - Exit" +
+                    "\nChoose an option: "
+            );
 
-            break;
+            int choice = scanner.nextInt(); 
+            scanner.nextLine(); // nextInt sonrası buffer temizleme
 
-        case 3:
-            break;
+            switch (choice) {
+                case 1: // Görev ekleme
+                    System.out.print("Enter task title: ");
+                    String title = scanner.nextLine();
 
-        case 4:
-            break;
+                    System.out.print("Enter task description: ");
+                    String description = scanner.nextLine();
 
+                    System.out.print("Enter task due date (yyyy-mm-dd): ");
+                    String dueDate = scanner.nextLine();
 
-        case 5:
-            break;
+                    
+                    Task newTask = new Task(nextId, title, description, dueDate, false);
+                    manager.addTask(newTask);
+                    nextId++; 
+                    break;
 
-        default: 
-        System.out.println("Invalid option.");
-      }
-      scanner.close();
+                case 2: // Görevleri listeleme
+                    manager.listTasks();
+                    break;
+
+                case 3: // Görev silme
+                    System.out.print("Enter Task ID to remove: ");
+                    int removeId = scanner.nextInt();
+                    scanner.nextLine();
+                    if (!manager.removeTask(removeId)) {
+                        System.out.println("Task not found.");
+                    }
+                    break;
+
+                case 4: // Görev durumunu değiştirme
+                    System.out.print("Enter Task ID to toggle status: ");
+                    int toggleId = scanner.nextInt();
+                    scanner.nextLine();
+                    if (!manager.toggleTaskStatus(toggleId)) {
+                        System.out.println("Task not found.");
+                    } else {
+                        System.out.println("Task status updated.");
+                    }
+                    break;
+
+                case 5: // Çıkış
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    return;
+
+                default: // Geçersiz seçenek
+                    System.out.println("Invalid option. Try again.");
+            }
+        }
     }
-
-
-} 
 }
